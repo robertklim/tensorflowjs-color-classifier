@@ -42,6 +42,7 @@ function setup() {
 
     // create one-hot tensor
     ys = tf.oneHot(labelsTensor, 9);
+    labelsTensor.dispose();
 
     // xs.print();
     // ys.print();
