@@ -2,6 +2,10 @@ let data;
 let xs, ys;
 let model;
 
+let rSlider, gSlider, bSlider;
+
+let labelP;
+
 let labelList = [
     'red-ish',
     'green-ish',
@@ -21,6 +25,12 @@ function preload() {
 function setup() {
     createCanvas(400, 400);
     // console.log(data.entries.length);
+
+    labelP = createP('');
+
+    rSlider = createSlider(0, 255, 255);
+    gSlider = createSlider(0, 255, 255);
+    bSlider = createSlider(0, 255, 0);
 
     let colors = [];
     let labels = [];
@@ -102,8 +112,22 @@ async function train() {
 }
 
 function draw() {
-    background(0);
-    stroke(255);
-    strokeWeight(4);
-    line(frameCount % width, 0, frameCount % width, height);
+    let r = rSlider.value();
+    let g = gSlider.value();
+    let b = bSlider.value();
+    background(r, g, b);
+
+    const xs = tf.tensor2d([
+        [r / 255, g / 255, b / 255] // normalize rgb values
+    ]);
+
+    let results = model.predict(xs);
+    let index = results.argMax(1).dataSync()[0];
+    let label = labelList[index];
+    labelP.html(label);
+    
+    
+    // stroke(255);
+    // strokeWeight(4);
+    // line(frameCount % width, 0, frameCount % width, height);
 }
