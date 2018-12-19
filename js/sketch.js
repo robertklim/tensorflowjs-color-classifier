@@ -65,6 +65,16 @@ function setup() {
     model.add(hidden);
     model.add(output);
 
+    // create an optimizer
+    const learningRate = 0.1;
+    const optimizer = tf.train.sgd(learningRate);
+
+    // define optimizer and loss function and compile the model
+    model.compile({
+        optimizer: optimizer,
+        loss: 'categoricalCrossentropy'
+    });
+
 }
 
 function draw() {
