@@ -76,17 +76,35 @@ function setup() {
     });
 
     // training
-    const trainConfig = {
-        epochs: 10,
-        validationSplit: 0.1,
-        shuffle: true
-    }
-    model.fit(xs, ys, trainConfig).then(results => {
+    train().then(results => {
         console.log(results.history.loss);
     });
 
 }
 
+async function train() {
+    const trainConfig = {
+        epochs: 10,
+        validationSplit: 0.1,
+        shuffle: true,
+        callbacks: {
+            onTrainBegin: () => console.log('train begin'),
+            onTrainEnd: () => console.log('train end'),
+            onBatchEnd: async (num, logs) => {
+                await tf.nextFrame();
+            },
+            onEpochEnd: (num, logs) => {
+                console.log(`Epoch: ${num}`);
+                console.log(`Loss: ${logs.loss}`);
+            } 
+        }
+    }
+    return await model.fit(xs, ys, trainConfig);
+}
+
 function draw() {
     background(0);
+    stroke(255);
+    strokeWeight(4);
+    line(frameCount % width, 0, frameCount % width, height);
 }
