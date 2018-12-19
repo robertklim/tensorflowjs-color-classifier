@@ -90,12 +90,11 @@ async function train() {
         callbacks: {
             onTrainBegin: () => console.log('train begin'),
             onTrainEnd: () => console.log('train end'),
-            onBatchEnd: async (num, logs) => {
-                await tf.nextFrame();
-            },
+            onBatchEnd: tf.nextFrame,
             onEpochEnd: (num, logs) => {
                 console.log(`Epoch: ${num}`);
                 console.log(`Loss: ${logs.loss}`);
+                console.log(`Validation loss: ${logs.val_loss}`);
             } 
         }
     }
