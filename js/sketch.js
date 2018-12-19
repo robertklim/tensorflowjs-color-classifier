@@ -117,14 +117,16 @@ function draw() {
     let b = bSlider.value();
     background(r, g, b);
 
-    const xs = tf.tensor2d([
-        [r / 255, g / 255, b / 255] // normalize rgb values
-    ]);
+    tf.tidy(() => {
+        const xs = tf.tensor2d([
+            [r / 255, g / 255, b / 255] // normalize rgb values
+        ]);
 
-    let results = model.predict(xs);
-    let index = results.argMax(1).dataSync()[0];
-    let label = labelList[index];
-    labelP.html(label);
+        let results = model.predict(xs);
+        let index = results.argMax(1).dataSync()[0];
+        let label = labelList[index];
+        labelP.html(label);
+    });
     
     
     // stroke(255);
