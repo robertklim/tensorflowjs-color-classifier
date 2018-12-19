@@ -54,7 +54,7 @@ function setup() {
     let hidden = tf.layers.dense({
         units: 16,
         activation: 'sigmoid',
-        inputDim: [3]
+        inputDim: 3
     });
 
     let output = tf.layers.dense({
@@ -73,6 +73,16 @@ function setup() {
     model.compile({
         optimizer: optimizer,
         loss: 'categoricalCrossentropy'
+    });
+
+    // training
+    const trainConfig = {
+        epochs: 10,
+        validationSplit: 0.1,
+        shuffle: true
+    }
+    model.fit(xs, ys, trainConfig).then(results => {
+        console.log(results.history.loss);
     });
 
 }
